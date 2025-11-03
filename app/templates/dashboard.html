@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="toolbar">
+  <div class="col">
+    <form method="post" action="{{ url_for('main.stock_add') }}" class="form-inline">
+      <select name="material_id" required>
+        {% for r in rows %}<option value="{{ r.id }}">{{ r.name }} ({{ r.unit }})</option>{% endfor %}
+      </select>
+      <input type="number" name="qty" step="0.01" min="0" placeholder="Qtd" required />
+      <button type="submit">Adicionar</button>
+    </form>
+  </div>
+  <div class="col">
+    <form method="post" action="{{ url_for('main.stock_remove') }}" class="form-inline">
+      <select name="material_id" required>
+        {% for r in rows %}<option value="{{ r.id }}">{{ r.name }} ({{ r.unit }})</option>{% endfor %}
+      </select>
+      <input type="number" name="qty" step="0.01" min="0" placeholder="Qtd" required />
+      <button type="submit">Remover</button>
+    </form>
+  </div>
+  {% if current_user.role == 'admin' %}
+    <div class="col right">
+      <a class="button" href="{{ url_for('main.reports') }}">Ver Relatório Mensal</a>
+    </div>
+  {% endif %}
+  </div>
+
+<table class="table" id="materials-table">
+  <thead>
+    <tr>
+      <th>Categoria</th><th>Item</th><th>Unidade</th><th>Estoque</th><th>Preço Atual</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows %}
+      <tr data-id="{{ r.id }}">
+        <td>{{ r.category }}</td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.unit }}</td>
+        <td class="stock">{{ '%.2f'|format(r.stock) }}</td>
+        <td class="price">R$ {{ '%.2f'|format(r.price) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  window.IOT_SSE_URL = "{{ url_for('main.sse_stream') }}"
+</script>
+{% endblock %}
+
+

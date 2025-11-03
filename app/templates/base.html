@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title or 'IoT Planilha - Estoque' }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <nav class="topbar">
+      <div class="brand">IoT Inventory</div>
+      <div class="links">
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('main.dashboard') }}">Dashboard</a>
+          <a href="{{ url_for('main.reports') }}">Relatórios</a>
+          {% if current_user.role == 'admin' %}
+            <a href="{{ url_for('main.materials') }}">Materiais</a>
+            <a href="{{ url_for('main.alerts') }}">Alertas</a>
+            <a href="{{ url_for('main.analytics') }}">Analytics</a>
+            <a href="http://localhost:3000" target="_blank" rel="noopener">Grafana</a>
+            <a href="{{ url_for('main.users') }}">Usuários</a>
+          {% endif %}
+          <a href="{{ url_for('auth.logout') }}">Sair</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class="flashes">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+  </html>
+
+

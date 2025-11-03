@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Analytics e Sugestões</h1>
+
+{% if not suggestions %}
+  <p>Nenhuma sugestão no momento. Estoques dentro dos limites.</p>
+{% else %}
+  <table class="table">
+    <thead><tr><th>Item</th><th>Estoque</th><th>Consumo mensal (estimado)</th><th>Sugerir compra</th></tr></thead>
+    <tbody>
+      {% for s in suggestions %}
+        <tr>
+          <td>{{ s.material.name }} ({{ s.material.unit }})</td>
+          <td>{{ '%.2f'|format(s.stock) }}</td>
+          <td>{{ '%.2f'|format(s.monthly) }}</td>
+          <td>
+            <form method="post" action="{{ url_for('main.analytics_suggest', mid=s.material.id) }}">
+              <button type="submit">Sugerir {{ '%.2f'|format(s.suggest_qty) }} {{ s.material.unit }}</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}
+
+

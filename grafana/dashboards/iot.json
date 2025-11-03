@@ -1,0 +1,31 @@
+{
+  "id": null,
+  "uid": "iot-main",
+  "title": "IoT Inventory",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Requests per second",
+      "gridPos": {"x": 0, "y": 0, "w": 8, "h": 4},
+      "targets": [{"expr": "rate(flask_request_total[1m])"}]
+    },
+    {
+      "type": "stat",
+      "title": "Stock events per minute",
+      "gridPos": {"x": 8, "y": 0, "w": 8, "h": 4},
+      "targets": [{"expr": "rate(stock_events_total[1m]) * 60"}]
+    },
+    {
+      "type": "graph",
+      "title": "Alerts (count)",
+      "gridPos": {"x": 0, "y": 4, "w": 16, "h": 8},
+      "targets": [{"expr": "increase(alerts_total[15m])"}]
+    }
+  ]
+}
+
+

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Alertas</h1>
+
+<table class="table">
+  <thead><tr><th>Nível</th><th>Tipo</th><th>Mensagem</th><th>Item</th><th>Data</th><th>Status</th><th>Ação</th></tr></thead>
+  <tbody>
+    {% for a in alerts %}
+      <tr>
+        <td>{{ a.level }}</td>
+        <td>{{ a.type }}</td>
+        <td>{{ a.message }}</td>
+        <td>{% if a.material_id %}{{ a.material.name }}{% else %}-{% endif %}</td>
+        <td>{{ a.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+        <td>{{ 'Resolvido' if a.resolved else 'Aberto' }}</td>
+        <td>
+          {% if not a.resolved %}
+          <form method="post" action="{{ url_for('main.resolve_alert', aid=a.id) }}">
+            <button type="submit">Resolver</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+

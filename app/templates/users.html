@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Usuários</h1>
+
+<a class="button" href="{{ url_for('auth.register') }}">Criar usuário</a>
+
+<table class="table">
+  <thead><tr><th>Email</th><th>Role</th><th>Criado</th></tr></thead>
+  <tbody>
+    {% for u in users %}
+      <tr>
+        <td>{{ u.email }}</td>
+        <td>{{ u.role }}</td>
+        <td>{{ u.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  </table>
+{% endblock %}
+
+

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Login</h1>
+<form method="post" class="form">
+  <label>Email<input type="email" name="email" required /></label>
+  <label>Senha<input type="password" name="password" required /></label>
+  <button type="submit">Entrar</button>
+  <p class="hint">Admin: admin@local / Admin123! | User: user@local / User123!</p>
+{% endblock %}
+
+

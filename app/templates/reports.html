@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Relatório Mensal</h1>
+
+<form method="get" class="form-inline" style="margin-bottom:12px; gap:8px;">
+  {# HTML5 month input, falls back to text if unsupported #}
+  <input type="month" name="ym" value="{{ start.strftime('%Y-%m') }}" />
+  <button type="submit">Aplicar</button>
+  <a class="button" href="{{ url_for('main.reports', ym=(start.replace(month=12, year=start.year-1).strftime('%Y-%m') if start.month==1 else start.replace(month=start.month-1).strftime('%Y-%m'))) }}">« Mês anterior</a>
+  <a class="button" href="{{ url_for('main.reports', ym=(start.replace(month=1, year=start.year+1).strftime('%Y-%m') if start.month==12 else start.replace(month=start.month+1).strftime('%Y-%m'))) }}">Próximo mês »</a>
+  <a class="button" href="{{ url_for('main.reports_csv', ym=start.strftime('%Y-%m')) }}">Exportar CSV</a>
+</form>
+
+<p>Período: {{ start.strftime('%d/%m/%Y') }} a {{ (end - (end-start)).strftime('%d/%m/%Y') }}</p>
+
+<table class="table">
+  <thead><tr><th>Categoria</th><th>Item</th><th>Gasto (R$)</th></tr></thead>
+  <tbody>
+    {% for cat, name, value in rows %}
+      <tr>
+        <td>{{ cat }}</td>
+        <td>{{ name }}</td>
+        <td>R$ {{ '%.2f'|format(value or 0) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr><th colspan="2">Total</th><th>R$ {{ '%.2f'|format(total or 0) }}</th></tr>
+  </tfoot>
+  </table>
+{% endblock %}
+
+
